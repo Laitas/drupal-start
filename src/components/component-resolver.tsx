@@ -1,39 +1,28 @@
-import { lazy, Suspense } from "react";
+const widgetModules = import.meta.glob("./ui/*.tsx", {eager: true});
+
+const preloadedComponents: Record<string, React.FC<any>> = {};
+
+for (const path in widgetModules) {
+	const componentName = path.replace("./ui/", "").replace(".tsx", "");
+	preloadedComponents[componentName] = (widgetModules[path] as any).default;
+}
 
 type Widget = {
 	uuid: string;
-	name: string;
+	name:string;
 	type: string;
 	fields: {
 		[key: string]: any;
 	};
 };
 
-const Component = (name: string) =>
-	lazy(() =>
-		import(`./ui/${name.replaceAll("_", "-")}.tsx`).catch(() => ({
-			default: () => null,
-		})),
-	);
-
-const Loader = () => {
-	return (
-		<div className="border-2 border-red-500 border-b-0 rounded-full animate-spin size-8"></div>
-	);
-};
-
-const ComponentResolver = (widget: Widget) => {
-	const ResolvedComponent = Component(widget.name);
-
-	if (!ResolvedComponent) {
-		return null;
+export function ComponentResolver(widget:Widget) {
+	const componentName = widget.name.replaceAll("_", "-");
+	const Component = preloadedComponents[componentName];
+	if (Component) {
+		return <Component {...widget.fields} />;
 	}
-
-	return (
-		<Suspense fallback={<Loader />}>
-			<ResolvedComponent {...widget.fields} />
-		</Suspense>
-	);
-};
+	return null;
+}
 
 export default ComponentResolver;

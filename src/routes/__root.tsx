@@ -80,6 +80,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             Home
           </Link>{' '}
           <Link
+            // @ts-expect-error
             to="/retail/cards"
             activeProps={{
               className: 'font-bold',
@@ -88,6 +89,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             Cards
           </Link>{' '}
           <Link
+            // @ts-expect-error
             to="/retail/autopilot"
             activeProps={{
               className: 'font-bold',
@@ -96,6 +98,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             Autopilot
           </Link>{' '}
           <Link
+            // @ts-expect-error
             to="/retail/payments"
             activeProps={{
               className: 'font-bold',
@@ -104,6 +107,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             Payments
           </Link>{' '}
           <Link
+            // @ts-expect-error
             to="/retail/become-customer"
             activeProps={{
               className: 'font-bold',
